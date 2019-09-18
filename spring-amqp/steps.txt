@@ -1,0 +1,41 @@
+1. Run RabbitMQ with Docker
+
+	$ docker pull rabbitmq
+	$ docker run -d --restart always --hostname localhost  --name rabbitmq -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+	$ docker ps -a
+	
+2. Then, enable tracing and turn tracing on. Create a trace via Admin > Tracing > Add a new trace, with name ‘trace1’ and click ‘Add trace’.	
+
+3. Create a Topic Exchange, Queues and Bindings
+
+   You can create a RabbitMQ exchange, and queues in the exchange, manually via the management console, but you can also create a ‘rabbit.definitions.json’ file and import this definitions file. In the RabbitMQ management console, go to Overview > Import definitions > Choose file… > select the ‘rabbit.definitions.json’ file > Open > click ‘Upload broker definitions’.
+	
+
+4. Create a Spring Application. Create the Spring directory structure.
+	$ mkdir -p src/main/java/hello
+	$ mkdir -p src/main/java/resources
+	$ mkdir -p src/test/java/hello
+	
+	for Windows..
+	
+	$ mkdir .\src\main\java\hello
+	$ mkdir .\src\main\java\resources
+	$ mkdir .\src\test\java\hello
+
+5. Create the Apache Maven ‘pom.xml’ file in the root directory of the project.
+6. Create a new main Spring application class ‘hello/Application.java’ in ‘src/main/java’. The Spring application is started from the main() method. The Spring AMQP Application creates the Queue, Exchange and the binding of the Exchange to the Queue by routing key. It then instantiates a simple message listener.
+
+7. Create a Spring AMQP Sender. After completing the main() method in ‘hello/Application.java’, Spring runs the CommandLineRunner.
+
+8. Create a Spring AMQP Receiver
+The Receiver simply listens for messages. The Spring application has instantiated the receiver in the message listener.
+
+9. Configure the Logger.
+
+To configure the Logger to log messages to the console, create a new file ‘~/src/main/java/resources/application.yaml’.
+
+
+10. Run the Spring Application.
+
+	$ mvn clean package
+	$ java -jar target/spring-amqp-0.1.0.jar
